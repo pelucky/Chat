@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>chat-client</artifactId>
+  <packaging>jar</packaging>
+
+  <name>chatClient</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <parent>
+  	<version>0.0.1-SNAPSHOT</version>
+  	<groupId>com.pelucky.chat</groupId>
+  	<artifactId>chat-aggregate</artifactId>
+  	<relativePath>../chat-aggregate/pom.xml</relativePath>
+  </parent>
+</project>
