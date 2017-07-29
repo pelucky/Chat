@@ -4,10 +4,10 @@ package com.pelucky.chat.chatClient;
  * Hello world!
  *
  */
-public class App 
+public class ChatCLientApp
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        new ClientGUI().run(args);
     }
 }

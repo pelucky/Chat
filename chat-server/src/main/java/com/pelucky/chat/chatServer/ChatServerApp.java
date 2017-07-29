@@ -1,13 +1,14 @@
 package com.pelucky.chat.chatServer;
 
+
 /**
- * Hello world!
+ * ChatServerApp
  *
  */
-public class App 
+public class ChatServerApp
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        new ServerGUI().run(args);
     }
 }
