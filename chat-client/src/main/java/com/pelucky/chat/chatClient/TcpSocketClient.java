@@ -8,12 +8,15 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pelucky.chat.chatClient.controller.ClientChatController;
+import com.pelucky.chat.chatClient.thread.ReceiveThread;
+import com.pelucky.chat.chatClient.thread.SendThread;
+
 public class TcpSocketClient {
 
     private Logger logger = LoggerFactory.getLogger(TcpSocketClient.class);
     private Socket socket;
     private Thread readThread;
-    private ReceiveThread receiveThread;
     private ClientChatController clientChatController;
     private String host;
     private String port;
@@ -44,6 +47,7 @@ public class TcpSocketClient {
         return clientChatController;
     }
 
+
     public TcpSocketClient(String host, String port, String username) {
         this.host = host;
         this.port = port;
@@ -55,7 +59,7 @@ public class TcpSocketClient {
             socket = new Socket(host, Integer.valueOf(port));
             logger.info("Connect server : {}", socket.getRemoteSocketAddress().toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             stop();
             return false;
         }
@@ -68,27 +72,34 @@ public class TcpSocketClient {
         }
         try {
             if (socket != null) {
+                logger.info("Disconnect to server!");
                 socket.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
     }
 
+    /*
+     * Client will send its userName to server when start thread
+     */
     public void startThread() {
         synchronized (socket) {
             try {
                 new Thread(new SendThread(socket.getOutputStream(), "#1." + username)).start();
 
-                receiveThread = new ReceiveThread(this);
-                readThread = new Thread(receiveThread);
+                readThread = new Thread(new ReceiveThread(this));
                 readThread.start();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.info(e.getMessage());
             }
         }
     }
 
+    /*
+     * Client start a thread for receiving userList from server to check
+     * userName is valid #3. used for receive userList
+     */
     public void receiveUserListThread() {
         new Thread(new Runnable() {
 
@@ -99,17 +110,14 @@ public class TcpSocketClient {
                 try {
                     bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     while ((line = bufferedReader.readLine()) != null) {
-                        logger.info("line: {}", line);
                         if (line.startsWith("#3.")) {
                             line = line.replace("#@", "\r\n");
                             userList = line.substring(3);
-                            logger.info("userList: {}", userList);
-                            logger.info("Check userList is null? {}", userList == null);
                             break;
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.info(e.getMessage());
                 }
             }
 
@@ -121,6 +129,14 @@ public class TcpSocketClient {
             return false;
         }
         return true;
+    }
+
+    public void updatejTextAreaUserList(String userList) {
+        clientChatController.updatejTextAreaUserList(userList);
+    }
+
+    public void updatejTextAreaReceive(String message) {
+        clientChatController.updatejTextAreaReceive(message);
     }
 
     @Override

@@ -58,5 +58,15 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<resources>
+			<resource>
+				<targetPath>${basedir}/target/conf</targetPath>
+				<filtering>false</filtering>
+				<directory></directory>
+				<includes>
+					<include>*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 </project>

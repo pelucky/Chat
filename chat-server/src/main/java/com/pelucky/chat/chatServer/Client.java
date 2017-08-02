@@ -3,18 +3,25 @@ package com.pelucky.chat.chatServer;
 import java.io.IOException;
 import java.net.Socket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pelucky.chat.chatServer.thread.ReceiveThread;
+import com.pelucky.chat.chatServer.thread.SendThread;
+
 public class Client {
     private String username;
     private String host;
     private int port;
     private Socket socket;
-    private ReceiveThread receiveThread;
     private Thread readThread;
+    private Logger logger = LoggerFactory.getLogger(Client.class);
 
     public Client(Socket socket) {
         this.socket = socket;
         host = socket.getInetAddress().getHostAddress();
         port = socket.getPort();
+        readThread = new Thread(new ReceiveThread(this));
     }
 
     public Socket getSocket() {
@@ -37,13 +44,15 @@ public class Client {
         this.username = username;
     }
 
+    /*
+     * Send #3. to client for check client's userName if it's in userList Start
+     * receiving thread
+     */
     public void startThread() throws IOException {
         String message = "#3." + TcpSocketServer.getInstance().getUserList();
         message = message.replace("\r\n", "#@");
         new Thread(new SendThread(socket.getOutputStream(), message)).start();
 
-        receiveThread = new ReceiveThread(this);
-        readThread = new Thread(receiveThread);
         readThread.start();
     }
 
@@ -52,11 +61,11 @@ public class Client {
             readThread.interrupt();
         }
         try {
-            if (socket !=null){
+            if (socket != null) {
                 socket.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
     }
 
