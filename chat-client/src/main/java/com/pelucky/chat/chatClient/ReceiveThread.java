@@ -50,6 +50,7 @@ public class ReceiveThread implements Runnable {
         }
     }
 
+
     private void updateUserList(String userList) {
         tcpSocketClient.setUserList(userList);
         clientChatController.updatejTextAreaUserList(userList);

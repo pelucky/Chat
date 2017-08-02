@@ -63,12 +63,15 @@ public class TcpSocketClient {
     }
 
     public void stop() {
-        if (socket != null) {
-            try {
+        if (readThread != null) {
+            readThread.interrupt();
+        }
+        try {
+            if (socket != null) {
                 socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -115,7 +118,6 @@ public class TcpSocketClient {
 
     public boolean checkUsernameAvaliable() {
         if (userList.contains(username)) {
-            stop();
             return false;
         }
         return true;

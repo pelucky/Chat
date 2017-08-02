@@ -47,8 +47,17 @@ public class Client {
         readThread.start();
     }
 
-    public void stopThread() {
-        readThread.interrupt();
+    public void stop() {
+        if (readThread != null) {
+            readThread.interrupt();
+        }
+        try {
+            if (socket !=null){
+                socket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

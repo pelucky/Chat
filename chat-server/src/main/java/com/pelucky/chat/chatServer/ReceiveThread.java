@@ -24,11 +24,13 @@ public class ReceiveThread implements Runnable {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 line = line.replace("#@", "\r\n");
-                logger.info("Server: {}", line);
+                logger.info("Server receive: {}", line);
                 if (line.startsWith("#1.")) {
                     updateUserList(line.substring(3));
                 } else if (line.startsWith("#2.")) {
                     updateReceiveMessage(line.substring(3));
+                } else if (line.startsWith("#3.")) {
+                    removeUserList(line.substring(3));
                 } else {
                     logger.info("Error message types");
                 }
@@ -53,6 +55,12 @@ public class ReceiveThread implements Runnable {
 
     private void updateReceiveMessage(String message) throws IOException {
         sendToAllClient("#2." + message);
+    }
+
+    private void removeUserList(String username) throws IOException {
+        TcpSocketServer.getInstance().removeUserList(client);
+        sendToAllClient("#1." + TcpSocketServer.getInstance().getUserList());
+        client.stop();
     }
 
     private void sendToAllClient(String message) throws IOException {

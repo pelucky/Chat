@@ -44,6 +44,7 @@ public class ClientLoginController implements ActionListener {
                         clientChatView.getjTextAreaUserList().setText(tcpSocketClient.getUserList());
                     } else {
                         clientLoginView.getjLabelInfo().setText("Username has existed, change one!");
+                        tcpSocketClient.stop();
                     }
 
                 } else {
@@ -55,6 +56,7 @@ public class ClientLoginController implements ActionListener {
             }
         }
     }
+
 
     private boolean isPortNumber(String portNumber) {
         if (portNumber != null && !portNumber.isEmpty() && portNumber.matches("\\d+")

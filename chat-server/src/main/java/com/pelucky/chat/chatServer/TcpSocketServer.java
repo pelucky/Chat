@@ -88,6 +88,14 @@ public class TcpSocketServer implements Runnable {
         serverController.getServerView().getjTextAreaUserList().setText(userList);
     }
 
+    public void removeUserList(Client client) {
+        clientArray.remove(client);
+        String username = client.getUsername();
+        logger.info("Remove username is: {}", username);
+        userList = userList.replace(username + "\r\n", "");
+        serverController.getServerView().getjTextAreaUserList().setText(userList);
+    }
+
     public String getUserList() {
         return userList;
     }

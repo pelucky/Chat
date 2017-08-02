@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 
 public class ClientChatView {
 
+    private JFrame frame;
     private JLabel jLabelWelcome;
     private JTextArea jTextAreaReceive;
     private JTextField jtextFieldSendMessage;
@@ -21,8 +22,11 @@ public class ClientChatView {
     private JTextArea jTextAreaUserList;
     private JScrollPane jScrollReceive;
     private JScrollPane jScrollUserList;
+    private ClientChatController clientChatController;
 
     public ClientChatView(TcpSocketClient tcpSocketClient) {
+        clientChatController = new ClientChatController(this, tcpSocketClient);
+
         jLabelWelcome = new JLabel("Welcome to Chat Client");
         jLabelWelcome.setBounds(10, 10, 350, 20);
         jLabelWelcome.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -39,7 +43,7 @@ public class ClientChatView {
 
         jButtonSend = new JButton("Send");
         jButtonSend.setBounds(530, 580, 80, 30);
-        jButtonSend.addActionListener(new ClientChatController(this, tcpSocketClient));
+        jButtonSend.addActionListener(clientChatController);
         jButtonSend.setActionCommand("send");
 
         jLabelUserList = new JLabel("UserList");
@@ -55,8 +59,9 @@ public class ClientChatView {
     }
 
     private void createAndShowGUI() {
-        JFrame frame = new JFrame("ChatClient");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame = new JFrame("ChatClient");
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(clientChatController);
         JPanel jPanel = new JPanel();
         frame.setContentPane(jPanel);
         jPanel.setLayout(null);
@@ -90,6 +95,10 @@ public class ClientChatView {
 
     public JTextArea getjTextAreaUserList() {
         return jTextAreaUserList;
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
 }

@@ -31,8 +31,11 @@ public class ClientLoginView extends JFrame {
     private JTextField jTextFieldUsername;
     private JLabel jLabelInfo;
     private JButton jButtonLogin;
+    private ClientLoginController clientLoginController;
 
     public ClientLoginView() {
+        clientLoginController = new ClientLoginController(this);
+
         jLabelWelcome = new JLabel("Welcome to Chat Client");
         jLabelWelcome.setBounds(10, 10, 350, 20);
         jLabelWelcome.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -71,7 +74,7 @@ public class ClientLoginView extends JFrame {
 
         jButtonLogin = new JButton("Login");
         jButtonLogin.setBounds(100, 190, 80, 30);
-        jButtonLogin.addActionListener(new ClientLoginController(this));
+        jButtonLogin.addActionListener(clientLoginController);
         jButtonLogin.setActionCommand("login");
     }
 
