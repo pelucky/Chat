@@ -9,6 +9,7 @@ public class ChatServerApp
 {
     public static void main( String[] args )
     {
-        new ServerGUI().run(args);
+        ServerView serverView = new ServerView();
+        serverView.run();
     }
 }

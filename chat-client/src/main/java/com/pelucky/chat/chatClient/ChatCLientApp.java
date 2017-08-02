@@ -1,13 +1,15 @@
 package com.pelucky.chat.chatClient;
 
+
 /**
- * Hello world!
+ * ChatClient
  *
  */
 public class ChatCLientApp
 {
     public static void main( String[] args )
     {
-        new ClientGUI().run(args);
+        ClientLoginView clientLoginView = new ClientLoginView();
+        clientLoginView.run();
     }
 }
